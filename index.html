@@ -9,11 +9,12 @@
 <body>
     <div class="container">
         <img src="Club Mega Banner.png" alt="Main Logo" class="main-logo">
+        <h1>Check MegaBucks Balance</h1>
         <button id="connectButton" class="btn">Connect your wallet</button>
-        <p id="walletAddress" class="info">Connect your wallet to view $MBK</p>
+        <p id="walletAddress" class="info">Wallet Address: Not connected</p>
         <p id="tokenBalance" class="info">
             <img src="megabucks.png" alt="Token Logo" class="token-logo">
-            MegaBucks $MBK
+            MegaBucks Balance: N/A
         </p>
     </div>
 
@@ -56,6 +57,9 @@
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
                 document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
+                document.getElementById('connectButton').innerText = 'Disconnect';
+                document.getElementById('connectButton').removeEventListener('click', connectWallet);
+                document.getElementById('connectButton').addEventListener('click', disconnectWallet);
 
                 const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
 
@@ -71,6 +75,15 @@
             } catch (error) {
                 console.error('Error connecting to MetaMask:', error);
             }
+        }
+
+        function disconnectWallet() {
+            account = null;
+            document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
+            document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: N/A';
+            document.getElementById('connectButton').innerText = 'Connect your wallet';
+            document.getElementById('connectButton').removeEventListener('click', disconnectWallet);
+            document.getElementById('connectButton').addEventListener('click', connectWallet);
         }
 
         async function setupWeb3() {
