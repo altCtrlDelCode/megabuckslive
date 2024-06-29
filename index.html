@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MegaBucks</title>
+    <title>Check MegaBucks Balance</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <img src="Club Mega Banner.png" alt="Main Logo" class="main-logo">
         <button id="connectButton" class="btn">Connect your wallet</button>
-        <p id="walletAddress" class="info">Connect Your Wallet to View MBK Balance</p>
-        <p  id="tokenBalance" class="info">
+        <p id="walletAddress" class="info">Connect your wallet to view $MBK</p>
+        <p id="tokenBalance" class="info">
             <img src="megabucks.png" alt="Token Logo" class="token-logo">
-            MegaBucks (MBK)
+            MegaBucks $MBK
         </p>
     </div>
 
@@ -43,7 +43,7 @@
                     if (isMobile()) {
                         window.open("https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/");
                     } else {
-                        alert('MetaMask not detected. Please install MetaMask!');
+                        alert('MetaMask is not detected. Please install MetaMask!');
                     }
                     return;
                 }
@@ -55,18 +55,18 @@
 
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
-                <document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
+                document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
 
                 const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
 
                 tokenContract.methods.balanceOf(account).call()
                     .then(balance => {
                         const tokenBalance = web3.utils.fromWei(balance, 'ether');
-                        document.getElementById('tokenBalance').innerText = `${tokenBalance} MBK`;
+                        document.getElementById('tokenBalance').innerText = `MegaBucks Balance: ${tokenBalance}`;
                     })
                     .catch(error => {
                         console.error(error);
-                        document.getElementById('tokenBalance').innerText = 'Error fetching balance';
+                        document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: Error fetching balance';
                     });
             } catch (error) {
                 console.error('Error connecting to MetaMask:', error);
