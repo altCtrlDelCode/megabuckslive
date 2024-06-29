@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegaBucks</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img src="Club Mega Banner.png" alt="Main Logo" class="main-logo">
+        <button id="connectButton" class="btn">Connect your wallet</button>
+        <p id="walletAddress" class="info">Connect Your Wallet to View MBK Balance</p>
+        <p  id="tokenBalance" class="info">
+            <img src="megabucks.png" alt="Token Logo" class="token-logo">
+            MegaBucks (MBK)
+        </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <script>
+        const tokenAddress = '0x800079F923d3715416250eD69561263662666C5B';
+        const tokenABI = [
+            {
+                "constant": true,
+                "inputs": [{"name": "_owner", "type": "address"}],
+                "name": "balanceOf",
+                "outputs": [{"name": "balance", "type": "uint256"}],
+                "type": "function"
+            }
+        ];
+
+        let web3;
+        let account;
+
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        async function connectWallet() {
+            try {
+                if (typeof window.ethereum === 'undefined' || !window.ethereum.isMetaMask) {
+                    if (isMobile()) {
+                        window.open("https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/");
+                    } else {
+                        alert('MetaMask not detected. Please install MetaMask!');
+                    }
+                    return;
+                }
+
+                web3 = new Web3(window.ethereum);
+                console.log('MetaMask is installed!');
+
+                await ethereum.request({ method: 'eth_requestAccounts' });
+
+                const accounts = await web3.eth.getAccounts();
+                account = accounts[0];
+                <document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
+
+                const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
+
+                tokenContract.methods.balanceOf(account).call()
+                    .then(balance => {
+                        const tokenBalance = web3.utils.fromWei(balance, 'ether');
+                        document.getElementById('tokenBalance').innerText = `${tokenBalance} MBK`;
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        document.getElementById('tokenBalance').innerText = 'Error fetching balance';
+                    });
+            } catch (error) {
+                console.error('Error connecting to MetaMask:', error);
+            }
+        }
+
+        async function setupWeb3() {
+            if (typeof window.ethereum !== 'undefined') {
+                web3 = new Web3(window.ethereum);
+            } else {
+                if (isMobile()) {
+                    window.open("https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/");
+                } else {
+                    alert('MetaMask is not detected. Please install MetaMask!');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', setupWeb3);
+        document.getElementById('connectButton').addEventListener('click', connectWallet);
+    </script>
+</body>
+</html>
