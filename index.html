@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check MegaBucks Balance</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-blue {
+            background-color: blue;
+            color: white;
+        }
+        .btn-red {
+            background-color: red;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <img src="Club Mega Banner.png" alt="Main Logo" class="main-logo">
         <h1>Check MegaBucks Balance</h1>
-        <button id="connectButton" class="btn">Connect your wallet</button>
+        <button id="connectButton" class="btn btn-blue">Connect your wallet</button>
         <p id="walletAddress" class="info">Wallet Address: Not connected</p>
         <p id="tokenBalance" class="info">
             <img src="megabucks.png" alt="Token Logo" class="token-logo">
@@ -58,6 +73,8 @@
                 account = accounts[0];
                 document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
                 document.getElementById('connectButton').innerText = 'Disconnect';
+                document.getElementById('connectButton').classList.remove('btn-blue');
+                document.getElementById('connectButton').classList.add('btn-red');
                 document.getElementById('connectButton').removeEventListener('click', connectWallet);
                 document.getElementById('connectButton').addEventListener('click', disconnectWallet);
 
@@ -82,13 +99,16 @@
             document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
             document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: N/A';
             document.getElementById('connectButton').innerText = 'Connect your wallet';
+            document.getElementById('connectButton').classList.remove('btn-red');
+            document.getElementById('connectButton').classList.add('btn-blue');
             document.getElementById('connectButton').removeEventListener('click', disconnectWallet);
             document.getElementById('connectButton').addEventListener('click', connectWallet);
         }
 
         async function setupWeb3() {
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
                 web3 = new Web3(window.ethereum);
+                console.log('MetaMask is installed!');
             } else {
                 if (isMobile()) {
                     window.open("https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/");
