@@ -77,22 +77,13 @@
             }
         }
 
-        async function disconnectWallet() {
-            try {
-                await ethereum.request({
-                    method: 'wallet_requestPermissions',
-                    params: [{ eth_accounts: {} }]
-                });
-
-                account = null;
-                document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
-                document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: N/A';
-                document.getElementById('connectButton').innerText = 'Connect your wallet';
-                document.getElementById('connectButton').removeEventListener('click', disconnectWallet);
-                document.getElementById('connectButton').addEventListener('click', connectWallet);
-            } catch (error) {
-                console.error('Error disconnecting from MetaMask:', error);
-            }
+        function disconnectWallet() {
+            account = null;
+            document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
+            document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: N/A';
+            document.getElementById('connectButton').innerText = 'Connect your wallet';
+            document.getElementById('connectButton').removeEventListener('click', disconnectWallet);
+            document.getElementById('connectButton').addEventListener('click', connectWallet);
         }
 
         async function setupWeb3() {
