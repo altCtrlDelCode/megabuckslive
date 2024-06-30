@@ -83,11 +83,11 @@
                 tokenContract.methods.balanceOf(account).call()
                     .then(balance => {
                         const tokenBalance = web3.utils.fromWei(balance, 'ether');
-                        document.getElementById('tokenBalance').innerText = `${tokenBalance} MBK`;
+                        document.getElementById('tokenBalance').innerHTML = `${tokenBalance} MBK`;
                     })
                     .catch(error => {
                         console.error(error);
-                        document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: Error fetching balance';
+                        document.getElementById('tokenBalance').innerHTML = 'MegaBucks Balance: Error fetching balance';
                     });
             } catch (error) {
                 console.error('Error connecting to MetaMask:', error);
@@ -97,7 +97,7 @@
         function disconnectWallet() {
             account = null;
             document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
-            document.getElementById('tokenBalance').innerText = 'MegaBucks Balance: N/A';
+            document.getElementById('tokenBalance').innerHTML = 'MegaBucks Balance: N/A';
             document.getElementById('connectButton').innerText = 'Connect your wallet';
             document.getElementById('connectButton').classList.remove('btn-red');
             document.getElementById('connectButton').classList.add('btn-blue');
