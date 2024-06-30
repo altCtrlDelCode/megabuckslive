@@ -25,8 +25,8 @@
     <div class="container">
         <img src="Club Mega Banner.png" alt="Main Logo" class="main-logo">
         <button id="connectButton" class="btn btn-blue">Connect your wallet</button>
-        <p id="walletAddress" class="info">Wallet Address: Not connected</p>
-        <p id="tokenBalance" class="info">
+        <p id="walletAddress" class="infoW">Wallet Address: Not connected</p>
+        <p id="tokenBalance" class="infoT">
             <img src="megabucks.png" alt="Token Logo" class="token-logo">
             MegaBucks Balance: N/A
         </p>
@@ -70,6 +70,7 @@
 
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
+
                 document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
                 document.getElementById('connectButton').innerText = 'Disconnect';
                 document.getElementById('connectButton').classList.remove('btn-blue');

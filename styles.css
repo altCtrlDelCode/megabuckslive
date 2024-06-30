@@ -20,7 +20,7 @@ body {
     background-color: #1a1818;
     padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(43, 9, 237, 0.1);
+    box-shadow: 0 0 10px rgba(140, 121, 245, 0.1);
     width: 100%;
     max-width: 400px;
 }
@@ -60,11 +60,20 @@ h1 {
     background-color: #efe44f;
 }
 
-.info {
+.infoT {
     margin-top: 0.5rem;
-    color: #555;
+    color: #0d8a32;
     display: inline-block;
     margin: 10px 0;
+}
+
+.infoW {
+    margin-top: 0.5rem;
+    color: #79731d;
+    display: inline-block;
+    margin: 10px 0;
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 .info span {
