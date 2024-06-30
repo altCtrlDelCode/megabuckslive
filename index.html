@@ -27,8 +27,9 @@
         <button id="connectButton" class="btn btn-blue">Connect your wallet</button>
         <p id="walletAddress" class="infoW">Wallet Address: Not connected</p>
         <p id="tokenBalance" class="infoT">
-            <img src="megabucks.png" alt="Token Logo" class="token-logo">
             MegaBucks Balance: N/A
+            <br/>
+            <img src="megabucks.png" alt="Token Logo" class="token-logo">
         </p>
     </div>
 
@@ -103,6 +104,9 @@
             document.getElementById('connectButton').classList.add('btn-blue');
             document.getElementById('connectButton').removeEventListener('click', disconnectWallet);
             document.getElementById('connectButton').addEventListener('click', connectWallet);
+
+            // Notify the user to manually disconnect from MetaMask
+            alert('Please manually disconnect your wallet from MetaMask.');
         }
 
         async function setupWeb3() {
