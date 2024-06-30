@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check MegaBucks Balance</title>
+    <title>MegaBucks</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .btn {
@@ -24,7 +24,6 @@
 <body>
     <div class="container">
         <img src="Club Mega Banner.png" alt="Main Logo" class="main-logo">
-        <h1>Check MegaBucks Balance</h1>
         <button id="connectButton" class="btn btn-blue">Connect your wallet</button>
         <p id="walletAddress" class="info">Wallet Address: Not connected</p>
         <p id="tokenBalance" class="info">
@@ -83,7 +82,7 @@
                 tokenContract.methods.balanceOf(account).call()
                     .then(balance => {
                         const tokenBalance = web3.utils.fromWei(balance, 'ether');
-                        document.getElementById('tokenBalance').innerText = `MegaBucks Balance: ${tokenBalance}`;
+                        document.getElementById('tokenBalance').innerText = `${tokenBalance} MBK`;
                     })
                     .catch(error => {
                         console.error(error);
