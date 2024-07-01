@@ -57,7 +57,7 @@
                 // Initialize WalletConnect Provider with Alchemy
                 provider = new WalletConnectProvider.default({
                     rpc: {
-                        1: "https://eth-mainnet.alchemyapi.io/v2/n_jUtVzJge2fGPEmIwUG9diZbxbULmPk" // Replace with your actual Alchemy API key
+                        1: "https://eth-mainnet.g.alchemy.com/v2/n_jUtVzJge2fGPEmIwUG9diZbxbULmPk" // Alchemy API key
                     }
                 });
 
@@ -84,7 +84,7 @@
                         document.getElementById('tokenBalance').innerHTML = `MegaBucks Balance: ${tokenBalance} MBK`;
                     })
                     .catch(error => {
-                        console.error(error);
+                        console.error('Error fetching balance:', error);
                         document.getElementById('tokenBalance').innerHTML = 'MegaBucks Balance: Error fetching balance';
                     });
 
@@ -103,6 +103,7 @@
 
                 // Subscribe to provider disconnection
                 provider.on("disconnect", (error) => {
+                    console.error('Disconnected:', error);
                     disconnectWallet();
                 });
             } catch (error) {
