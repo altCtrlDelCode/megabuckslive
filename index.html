@@ -56,10 +56,9 @@
                     return;
                 }
 
-                web3 = new Web3(window.ethereum);
-                console.log('MetaMask is installed!');
-
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                web3 = new Web3(window.ethereum);
 
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
@@ -101,7 +100,7 @@
         }
 
         async function setupWeb3() {
-            if (typeof window.ethereum !== 'undefined') {
+            if (window.ethereum) {
                 web3 = new Web3(window.ethereum);
                 console.log('MetaMask is installed!');
             } else {
@@ -109,7 +108,7 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('load', () => {
             setupWeb3();
             document.getElementById('connectButton').addEventListener('click', connectWallet);
         });
