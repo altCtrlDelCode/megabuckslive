@@ -49,19 +49,10 @@
         let web3;
         let account;
 
-        function isMobile() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        }
-
         async function connectWallet() {
             try {
                 if (typeof window.ethereum === 'undefined' || !window.ethereum.isMetaMask) {
-                    if (isMobile()) {
-                        // Redirect to MetaMask mobile app
-                        window.location.href = 'https://metamask.app.link/dapp/altctrldelcode.github.io/megabuckslive/';
-                    } else {
-                        alert('MetaMask is not detected. Please install MetaMask!');
-                    }
+                    alert('MetaMask is not detected. Please install MetaMask!');
                     return;
                 }
 
@@ -85,7 +76,7 @@
                 tokenContract.methods.balanceOf(account).call()
                     .then(balance => {
                         const tokenBalance = web3.utils.fromWei(balance, 'ether');
-                        document.getElementById('tokenBalance').innerHTML = `${tokenBalance} MBK`;
+                        document.getElementById('tokenBalance').innerHTML = `MegaBucks Balance: ${tokenBalance} MBK`;
                     })
                     .catch(error => {
                         console.error(error);
@@ -115,12 +106,7 @@
                 web3 = new Web3(window.ethereum);
                 console.log('MetaMask is installed!');
             } else {
-                if (isMobile()) {
-                    // Redirect to MetaMask mobile app
-                    window.location.href = 'https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/';
-                } else {
-                    alert('MetaMask is not detected. Please install MetaMask!');
-                }
+                alert('MetaMask is not detected. Please install MetaMask!');
             }
         }
 
