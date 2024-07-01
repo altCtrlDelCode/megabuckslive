@@ -33,7 +33,10 @@
         </p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <!-- Include Web3Modal and Web3.js -->
+    <script src="https://unpkg.com/web3modal"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+
     <script>
         const tokenAddress = '0x800079F923d3715416250eD69561263662666C5B';
         const tokenABI = [
@@ -47,18 +50,24 @@
         ];
 
         let web3;
+        let provider;
         let account;
 
+        // Initialize Web3Modal
+        const providerOptions = {
+            /* See https://github.com/Web3Modal/web3modal for full options */
+        };
+
+        const web3Modal = new Web3Modal({
+            cacheProvider: false, // optional
+            providerOptions // required
+        });
+
         async function connectWallet() {
-            if (typeof window.ethereum === 'undefined') {
-                alert('MetaMask is not detected. Please install MetaMask!');
-                return;
-            }
-
-            web3 = new Web3(window.ethereum);
-
             try {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                provider = await web3Modal.connect();
+                web3 = new Web3(provider);
+
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
 
@@ -80,13 +89,37 @@
                         console.error(error);
                         document.getElementById('tokenBalance').innerHTML = 'MegaBucks Balance: Error fetching balance';
                     });
+
+                // Subscribe to accounts change
+                provider.on("accountsChanged", (accounts) => {
+                    account = accounts[0];
+                    document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
+                });
+
+                // Subscribe to chainId change
+                provider.on("chainChanged", (chainId) => {
+                    // Handle the new chain.
+                    // Correctly handling chain changes can be complicated, this is a basic example.
+                    window.location.reload();
+                });
+
+                // Subscribe to provider disconnection
+                provider.on("disconnect", (error) => {
+                    disconnectWallet();
+                });
             } catch (error) {
-                console.error('Error connecting to MetaMask:', error);
+                console.error('Error connecting to wallet:', error);
             }
         }
 
         function disconnectWallet() {
+            if (provider.close) {
+                provider.close();
+            }
+            web3Modal.clearCachedProvider();
+            provider = null;
             account = null;
+
             document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
             document.getElementById('tokenBalance').innerHTML = 'MegaBucks Balance: N/A';
             document.getElementById('connectButton').innerText = 'Connect your wallet';
