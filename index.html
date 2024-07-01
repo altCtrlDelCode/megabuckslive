@@ -51,7 +51,7 @@
 
         async function connectWallet() {
             try {
-                if (typeof window.ethereum === 'undefined' || !window.ethereum.isMetaMask) {
+                if (typeof window.ethereum === 'undefined') {
                     alert('MetaMask is not detected. Please install MetaMask!');
                     return;
                 }
@@ -59,7 +59,7 @@
                 web3 = new Web3(window.ethereum);
                 console.log('MetaMask is installed!');
 
-                await ethereum.request({ method: 'eth_requestAccounts' });
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
 
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
@@ -102,7 +102,7 @@
         }
 
         async function setupWeb3() {
-            if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
+            if (typeof window.ethereum !== 'undefined') {
                 web3 = new Web3(window.ethereum);
                 console.log('MetaMask is installed!');
             } else {
