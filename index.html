@@ -33,10 +33,9 @@
         </p>
     </div>
 
-    <!-- Include Web3Modal and Web3.js -->
-    <script src="https://unpkg.com/web3modal"></script>
+    <!-- Include Web3.js and WalletConnect provider -->
+    <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script src="https://unpkg.com/@walletconnect/web3-provider@1.6.6/dist/umd/index.min.js"></script>
     <script>
         const tokenAddress = '0x800079F923d3715416250eD69561263662666C5B';
         const tokenABI = [
@@ -53,24 +52,18 @@
         let provider;
         let account;
 
-        // Initialize Web3Modal with WalletConnect option
-        const providerOptions = {
-            walletconnect: {
-                package: WalletConnectProvider, // required
-                options: {
-                    infuraId: "a9977e558c864154a032672740e9f99e", // required - replace this with your actual Infura project ID
-                }
-            }
-        };
-
-        const web3Modal = new Web3Modal({
-            cacheProvider: false, // optional
-            providerOptions // required
-        });
-
         async function connectWallet() {
             try {
-                provider = await web3Modal.connect();
+                // Initialize WalletConnect Provider with Alchemy
+                provider = new WalletConnectProvider.default({
+                    rpc: {
+                        1: "https://eth-mainnet.alchemyapi.io/v2/n_jUtVzJge2fGPEmIwUG9diZbxbULmPk" // Replace with your actual Alchemy API key
+                    }
+                });
+
+                // Enable session (triggers QR Code modal)
+                await provider.enable();
+                
                 web3 = new Web3(provider);
 
                 const accounts = await web3.eth.getAccounts();
@@ -121,7 +114,6 @@
             if (provider.close) {
                 provider.close();
             }
-            web3Modal.clearCachedProvider();
             provider = null;
             account = null;
 
