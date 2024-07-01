@@ -99,19 +99,7 @@
             alert('Please manually disconnect your wallet from MetaMask.');
         }
 
-        async function setupWeb3() {
-            if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
-                console.log('MetaMask is installed!');
-            } else {
-                alert('MetaMask is not detected. Please install MetaMask!');
-            }
-        }
-
-        window.addEventListener('load', () => {
-            setupWeb3();
-            document.getElementById('connectButton').addEventListener('click', connectWallet);
-        });
+        document.getElementById('connectButton').addEventListener('click', connectWallet);
     </script>
 </body>
 </html>
