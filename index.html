@@ -97,7 +97,6 @@
             document.getElementById('connectButton').removeEventListener('click', disconnectWallet);
             document.getElementById('connectButton').addEventListener('click', connectWallet);
 
-            // Notify the user to manually disconnect from MetaMask
             alert('Please manually disconnect your wallet from MetaMask.');
         }
 
@@ -110,8 +109,10 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', setupWeb3);
-        document.getElementById('connectButton').addEventListener('click', connectWallet);
+        document.addEventListener('DOMContentLoaded', () => {
+            setupWeb3();
+            document.getElementById('connectButton').addEventListener('click', connectWallet);
+        });
     </script>
 </body>
 </html>
