@@ -50,16 +50,15 @@
         let account;
 
         async function connectWallet() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('MetaMask is not detected. Please install MetaMask!');
+                return;
+            }
+
+            web3 = new Web3(window.ethereum);
+
             try {
-                if (typeof window.ethereum === 'undefined') {
-                    alert('MetaMask is not detected. Please install MetaMask!');
-                    return;
-                }
-
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-                web3 = new Web3(window.ethereum);
-
                 const accounts = await web3.eth.getAccounts();
                 account = accounts[0];
 
