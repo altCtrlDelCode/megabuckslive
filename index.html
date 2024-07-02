@@ -33,34 +33,38 @@
         </p>
     </div>
 
-    <!-- Include Thirdweb SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@thirdweb-dev/sdk@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.0/web3.min.js"></script>
+    <script src="https://unpkg.com/@thirdweb-dev/sdk@latest/dist/browser.umd.js"></script>
     <script>
+        const clientId = '96c59ec9741948dc153e675e94280676'; /*CLIENT_ID*/
         const tokenAddress = '0x800079F923d3715416250eD69561263662666C5B';
-        const tokenABI = [
-            {
-                "constant": true,
-                "inputs": [{"name": "_owner", "type": "address"}],
-                "name": "balanceOf",
-                "outputs": [{"name": "balance", "type": "uint256"}],
-                "type": "function"
-            }
-        ];
 
         let sdk;
+        let contract;
         let provider;
         let account;
 
+        async function setupThirdweb() {
+            sdk = thirdweb.createThirdwebClient({
+                clientId: clientId
+            });
+
+            contract = sdk.getContract({
+                client: sdk,
+                chain: thirdweb.defineChain(1), // 1 is for Ethereum mainnet
+                address: tokenAddress
+            });
+
+            provider = sdk.provider;
+        }
+
         async function connectWallet() {
             try {
-                sdk = new ThirdwebSDK.ThirdwebSDK("ethereum");
-                provider = await sdk.wallet.connect("walletConnect");
-                console.log("Wallet connected!");
+                await setupThirdweb();
+                
+                const walletConnection = await sdk.wallet.connect("walletconnect");
 
-                const address = await provider.getSigner().getAddress();
-                account = address;
-
+                account = walletConnection.address;
                 document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
                 document.getElementById('connectButton').innerText = 'Disconnect';
                 document.getElementById('connectButton').classList.remove('btn-blue');
@@ -68,43 +72,17 @@
                 document.getElementById('connectButton').removeEventListener('click', connectWallet);
                 document.getElementById('connectButton').addEventListener('click', disconnectWallet);
 
-                const web3 = new Web3(provider);
-                const tokenContract = new web3.eth.Contract(tokenABI, tokenAddress);
-
-                tokenContract.methods.balanceOf(account).call()
-                    .then(balance => {
-                        const tokenBalance = web3.utils.fromWei(balance, 'ether');
-                        document.getElementById('tokenBalance').innerHTML = `${tokenBalance} MBK`;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching balance:', error);
-                        document.getElementById('tokenBalance').innerHTML = 'MegaBucks Balance: Error fetching balance';
-                    });
-
-                // Subscribe to account changes
-                provider.on("accountsChanged", (accounts) => {
-                    account = accounts[0];
-                    document.getElementById('walletAddress').innerText = `Wallet Address: ${account}`;
-                });
-
-                // Subscribe to chain changes
-                provider.on("chainChanged", (chainId) => {
-                    window.location.reload();
-                });
-
-                // Subscribe to provider disconnection
-                provider.on("disconnect", (error) => {
-                    console.error('Disconnected:', error);
-                    disconnectWallet();
-                });
+                const balance = await contract.read("balanceOf", account);
+                const tokenBalance = web3.utils.fromWei(balance, 'ether');
+                document.getElementById('tokenBalance').innerHTML = `${tokenBalance} MBK`;
             } catch (error) {
-                console.error('Error connecting to wallet:', error);
+                console.error('Error connecting to WalletConnect:', error);
             }
         }
 
         function disconnectWallet() {
-            if (provider) {
-                provider.disconnect();
+            if (sdk && sdk.wallet) {
+                sdk.wallet.disconnect();
             }
             account = null;
             document.getElementById('walletAddress').innerText = 'Wallet Address: Not connected';
@@ -118,6 +96,7 @@
             alert('Please manually disconnect your wallet from WalletConnect.');
         }
 
+        document.addEventListener('DOMContentLoaded', setupThirdweb);
         document.getElementById('connectButton').addEventListener('click', connectWallet);
     </script>
 </body>
